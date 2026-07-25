@@ -6,22 +6,25 @@ from .models import Event
 class EventAdmin(admin.ModelAdmin):
 
     list_display = (
-        'id',
-        'title',
-        'venue',
-        'event_date',
-        'available_seats',
-        'status',
-    )
-
-    list_filter = (
-        'status',
-        'event_date',
+        "title",
+        "category",
+        "organizer",
+        "venue",
+        "event_date",
+        "available_seats",
+        "status",
     )
 
     search_fields = (
-        'title',
-        'venue',
+        "title",
+        "organizer",
+        "venue",
     )
 
-    ordering = ('-created_at',)
+    list_filter = (
+        "category",
+        "status",
+        "event_date",
+    )
+
+    ordering = ("event_date",)
