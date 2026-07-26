@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Event
 from .forms import EventForm
-
 
 # Home Page
 def home(request):
@@ -44,3 +43,13 @@ def add_event(request):
     return render(request,
                   "events/add_event.html",
                   {"form": form})
+
+
+def event_detail(request, id):
+    event = get_object_or_404(Event, id=id)
+
+    return render(
+        request,
+        "events/event_detail.html",
+        {"event": event}
+    )

@@ -8,112 +8,186 @@ Event List
 
 <div class="container mt-5">
 
-    <div class="d-flex justify-content-between mb-3">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h2>All Events</h2>
+        <h2 class="fw-bold">
+            📅 All Events
+        </h2>
 
         <a href="{% url 'add_event' %}"
            class="btn btn-primary">
 
+            <i class="bi bi-plus-circle"></i>
             Add Event
 
         </a>
 
     </div>
 
-    <table class="table table-bordered table-hover">
+    <!-- Event Table -->
+    <div class="card shadow">
 
-        <thead class="table-dark">
+        <div class="card-body">
 
-        <tr>
+            <div class="table-responsive">
 
-            <th>ID</th>
-            <th>Banner</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Date</th>
-            <th>Venue</th>
-            <th>Seats</th>
-            <th>Status</th>
+                <table class="table table-bordered table-hover align-middle">
 
-        </tr>
+                    <thead class="table-dark">
 
-        </thead>
+                        <tr>
 
-        <tbody>
+                            <th>ID</th>
 
-        {% for event in events %}
+                            <th>Banner</th>
 
-        <tr>
+                            <th>Title</th>
 
-            <td>{{ event.id }}</td>
+                            <th>Category</th>
 
-            <td>
+                            <th>Date</th>
 
-                {% if event.event_banner %}
+                            <th>Venue</th>
 
-                    <img src="{{ event.event_banner.url }}"
-                         width="100">
+                            <th>Seats</th>
 
-                {% else %}
+                            <th>Status</th>
 
-                    No Image
+                            <th class="text-center" width="180">
+                                Actions
+                            </th>
 
-                {% endif %}
+                        </tr>
 
-            </td>
+                    </thead>
 
-            <td>{{ event.title }}</td>
+                    <tbody>
 
-            <td>{{ event.category }}</td>
+                    {% for event in events %}
 
-            <td>{{ event.event_date }}</td>
+                        <tr>
 
-            <td>{{ event.venue }}</td>
+                            <td>{{ event.id }}</td>
 
-            <td>
+                            <td>
 
-                {{ event.available_seats }}/{{ event.total_seats }}
+                                {% if event.event_banner %}
 
-            </td>
+                                    <img src="{{ event.event_banner.url }}"
+                                         width="90"
+                                         height="60"
+                                         class="rounded shadow-sm"
+                                         style="object-fit: cover;">
 
-            <td>
+                                {% else %}
 
-                {% if event.status %}
+                                    <span class="text-muted">
+                                        No Image
+                                    </span>
 
-                    <span class="badge bg-success">
-                        Active
-                    </span>
+                                {% endif %}
 
-                {% else %}
+                            </td>
 
-                    <span class="badge bg-danger">
-                        Inactive
-                    </span>
+                            <td class="fw-semibold">
+                                {{ event.title }}
+                            </td>
 
-                {% endif %}
+                            <td>
+                                {{ event.category }}
+                            </td>
 
-            </td>
+                            <td>
+                                {{ event.event_date }}
+                            </td>
 
-        </tr>
+                            <td>
+                                {{ event.venue }}
+                            </td>
 
-        {% empty %}
+                            <td>
 
-        <tr>
+                                {{ event.available_seats }}/{{ event.total_seats }}
 
-            <td colspan="8" class="text-center">
+                            </td>
 
-                No Events Found
+                            <td>
 
-            </td>
+                                {% if event.status %}
 
-        </tr>
+                                    <span class="badge bg-success">
+                                        Active
+                                    </span>
 
-        {% endfor %}
+                                {% else %}
 
-        </tbody>
+                                    <span class="badge bg-danger">
+                                        Inactive
+                                    </span>
 
-    </table>
+                                {% endif %}
+
+                            </td>
+
+                            <td class="text-center">
+
+                                <!-- View -->
+                                <a href="{% url 'event_detail' event.id %}"
+                                   class="btn btn-info btn-sm text-white"
+                                   title="View">
+
+                                    <i class="bi bi-eye-fill"></i>
+
+                                </a>
+
+                                <!-- Edit -->
+                                <a href="#"
+                                   class="btn btn-warning btn-sm"
+                                   title="Edit">
+
+                                    <i class="bi bi-pencil-square"></i>
+
+                                </a>
+
+                                <!-- Delete -->
+                                <a href="#"
+                                   class="btn btn-danger btn-sm"
+                                   title="Delete">
+
+                                    <i class="bi bi-trash-fill"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td colspan="9" class="text-center text-muted">
+
+                                <h5 class="mt-3">
+                                    No Events Found
+                                </h5>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
