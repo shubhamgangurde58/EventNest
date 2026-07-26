@@ -84,3 +84,21 @@ def edit_event(request, id):
             "event": event
         }
     )
+
+def delete_event(request, id):
+
+    event = get_object_or_404(Event, id=id)
+
+    if request.method == "POST":
+
+        event.delete()
+
+        return redirect("event_list")
+
+    return render(
+        request,
+        "events/delete_event.html",
+        {
+            "event": event
+        }
+    )
