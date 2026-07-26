@@ -25,6 +25,33 @@ Event List
 
     </div>
 
+    <form method="GET" class="row mb-4">
+
+        <div class="col-md-10">
+
+            <input
+                type="text"
+                class="form-control"
+                name="q"
+                placeholder="Search by Title, Category, Organizer or Venue..."
+                value="{{ query }}">
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button class="btn btn-primary w-100">
+
+                <i class="bi bi-search"></i>
+
+                    Search
+
+            </button>
+
+        </div>
+
+    </form>
+
     <!-- Event Table -->
     <div class="card shadow">
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Event
 from .forms import EventForm
+from django.db.models import Q
 
 # Home Page
 def home(request):
@@ -9,10 +10,32 @@ def home(request):
 
 # Event List
 def event_list(request):
-    events = Event.objects.all()
-    return render(request, "events/event_list.html", {
-        "events": events
-    })
+
+    query = request.GET.get("q")
+
+    if query:
+
+        events = Event.objects.filter(
+
+            Q(title__icontains=query) |
+            Q(category__icontains=query) |
+            Q(venue__icontains=query) |
+            Q(organizer__icontains=query)
+
+        )
+
+    else:
+
+        events = Event.objects.all()
+
+    return render(
+        request,
+        "events/event_list.html",
+        {
+            "events": events,
+            "query": query
+        }
+    )
 
 
 # Add Event
