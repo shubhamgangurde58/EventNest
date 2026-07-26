@@ -1,18 +1,54 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Add Event</title>
-</head>
+{% block title %}
+Add Event
+{% endblock %}
 
-<body>
+{% block content %}
 
-<h1>Add Event</h1>
+<div class="container mt-5">
 
-<p>Event Form will come here.</p>
+    <div class="row justify-content-center">
 
-<a href="/events/list/">Go To Event List</a>
+        <div class="col-md-8">
 
-</body>
+            <div class="card shadow">
 
-</html>
+                <div class="card-header bg-primary text-white">
+
+                    <h3>Add New Event</h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <button class="btn btn-success">
+                            Save Event
+                        </button>
+
+                        <a href="{% url 'event_list' %}"
+                           class="btn btn-secondary">
+
+                            Cancel
+
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,18 +1,120 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Event List</title>
-</head>
+{% block title %}
+Event List
+{% endblock %}
 
-<body>
+{% block content %}
 
-<h1>Event List</h1>
+<div class="container mt-5">
 
-<p>All Events will appear here.</p>
+    <div class="d-flex justify-content-between mb-3">
 
-<a href="/events/add/">Add New Event</a>
+        <h2>All Events</h2>
 
-</body>
+        <a href="{% url 'add_event' %}"
+           class="btn btn-primary">
 
-</html>
+            Add Event
+
+        </a>
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+        <tr>
+
+            <th>ID</th>
+            <th>Banner</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Venue</th>
+            <th>Seats</th>
+            <th>Status</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for event in events %}
+
+        <tr>
+
+            <td>{{ event.id }}</td>
+
+            <td>
+
+                {% if event.event_banner %}
+
+                    <img src="{{ event.event_banner.url }}"
+                         width="100">
+
+                {% else %}
+
+                    No Image
+
+                {% endif %}
+
+            </td>
+
+            <td>{{ event.title }}</td>
+
+            <td>{{ event.category }}</td>
+
+            <td>{{ event.event_date }}</td>
+
+            <td>{{ event.venue }}</td>
+
+            <td>
+
+                {{ event.available_seats }}/{{ event.total_seats }}
+
+            </td>
+
+            <td>
+
+                {% if event.status %}
+
+                    <span class="badge bg-success">
+                        Active
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger">
+                        Inactive
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="8" class="text-center">
+
+                No Events Found
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
