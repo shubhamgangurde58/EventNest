@@ -53,3 +53,34 @@ def event_detail(request, id):
         "events/event_detail.html",
         {"event": event}
     )
+
+def edit_event(request, id):
+
+    event = get_object_or_404(Event, id=id)
+
+    if request.method == "POST":
+
+        form = EventForm(
+            request.POST,
+            request.FILES,
+            instance=event
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect("event_list")
+
+    else:
+
+        form = EventForm(instance=event)
+
+    return render(
+        request,
+        "events/edit_event.html",
+        {
+            "form": form,
+            "event": event
+        }
+    )

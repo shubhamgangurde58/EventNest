@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Event
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-warning text-dark">
+
+                    <h3>
+                        <i class="bi bi-pencil-square"></i>
+                        Edit Event
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <button class="btn btn-success">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            Update Event
+
+                        </button>
+
+                        <a href="{% url 'event_list' %}"
+                           class="btn btn-secondary">
+
+                            Cancel
+
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
