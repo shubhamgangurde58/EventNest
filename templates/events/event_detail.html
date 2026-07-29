@@ -13,8 +13,11 @@
 {% if event.event_banner %}
 
 <img src="{{ event.event_banner.url }}"
-class="card-img-top"
-style="height:350px;object-fit:cover;">
+     class="img-fluid rounded"
+     style="width:100%;
+            max-height:400px;
+            object-fit:contain;
+            background:#f8f9fa;">
 
 {% endif %}
 
@@ -92,12 +95,6 @@ style="height:350px;object-fit:cover;">
 
 <p>
 
-<strong>Seats :</strong>
-
-{{ event.available_seats }}/{{ event.total_seats }}
-
-</p>
-
 <p>
 
 <strong>Status :</strong>
@@ -122,6 +119,30 @@ Inactive
 
 </p>
 
+<p>
+
+<strong>Available Seats :</strong>
+
+<span class="badge bg-primary">
+
+{{ event.available_seats }}
+
+</span>
+
+</p>
+
+<p>
+
+<strong>Total Seats :</strong>
+
+<span class="badge bg-dark">
+
+{{ event.total_seats }}
+
+</span>
+
+</p>
+
 </div>
 
 </div>
@@ -138,30 +159,59 @@ Inactive
 
 <div class="mt-4">
 
-<a href="{% url 'edit_event' event.id %}"
-class="btn btn-warning">
+        {% if event.available_seats > 0 and event.status %}
 
-<i class="bi bi-pencil"></i>
+        <a href="{% url 'register_event' event.id %}"
+        class="btn btn-success">
 
-Edit
+            <i class="bi bi-person-plus-fill"></i>
 
-</a>
+            Register Now
 
-<a href="{% url 'delete_event' event.id %}"
-class="btn btn-danger">
+        </a>
 
-<i class="bi bi-trash"></i>
+        {% else %}
 
-Delete
+        <button class="btn btn-secondary" disabled>
 
-</a>
+            <i class="bi bi-x-circle"></i>
 
-<a href="{% url 'event_list' %}"
-class="btn btn-secondary">
+            Registration Closed
 
-Back
+        </button>
 
-</a>
+        {% endif %}
+
+
+    <a href="{% url 'edit_event' event.id %}"
+       class="btn btn-warning">
+
+        <i class="bi bi-pencil-square"></i>
+
+        Edit
+
+    </a>
+
+
+    <a href="{% url 'delete_event' event.id %}"
+       class="btn btn-danger">
+
+        <i class="bi bi-trash-fill"></i>
+
+        Delete
+
+    </a>
+
+
+    <a href="{% url 'event_list' %}"
+       class="btn btn-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back
+
+    </a>
+
 
 </div>
 

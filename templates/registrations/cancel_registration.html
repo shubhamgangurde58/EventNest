@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}
+Cancel Registration
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-danger text-white">
+
+<h3>
+
+Cancel Registration
+
+</h3>
+
+</div>
+
+<div class="card-body text-center">
+
+<h4>
+
+{{ registration.full_name }}
+
+</h4>
+
+<p>
+
+Event :
+
+<strong>
+
+{{ registration.event.title }}
+
+</strong>
+
+</p>
+
+<p>
+
+Are you sure you want to cancel this registration?
+
+</p>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<button class="btn btn-danger">
+
+Yes, Cancel
+
+</button>
+
+<a href="{% url 'registration_detail' registration.id %}"
+class="btn btn-secondary">
+
+No
+
+</a>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
