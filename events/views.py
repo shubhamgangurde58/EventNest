@@ -2,39 +2,66 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Event
 from .forms import EventForm
 from django.db.models import Q
+from django.utils.timezone import now
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.utils.timezone import now
 
 # Home Page
 def home(request):
     return render(request, "home.html")
 
 
-# Event List
 def event_list(request):
 
-    query = request.GET.get("q")
+    query = request.GET.get("q", "")
+    category = request.GET.get("category", "")
+
+    events = Event.objects.all()
 
     if query:
-
-        events = Event.objects.filter(
-
+        events = events.filter(
             Q(title__icontains=query) |
             Q(category__icontains=query) |
             Q(venue__icontains=query) |
             Q(organizer__icontains=query)
-
         )
 
-    else:
+    if category:
+        events = events.filter(category=category)
 
-        events = Event.objects.all()
+    paginator = Paginator(events, 5)
+
+    page_number = request.GET.get("page")
+
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+
+        "events": page_obj,
+
+        "page_obj": page_obj,
+
+        "query": query,
+
+        "selected_category": category,
+
+        "categories": Event.CATEGORY_CHOICES,
+
+        "total_events": Event.objects.count(),
+
+        "active_events": Event.objects.filter(status=True).count(),
+
+        "upcoming_events": Event.objects.filter(
+            event_date__gte=now().date()
+        ).count(),
+
+    }
 
     return render(
         request,
         "events/event_list.html",
-        {
-            "events": events,
-            "query": query
-        }
+        context
     )
 
 

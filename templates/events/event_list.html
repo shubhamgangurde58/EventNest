@@ -25,32 +25,108 @@ Event List
 
     </div>
 
-    <form method="GET" class="row mb-4">
+    <form method="GET" class="row g-3 mb-4">
 
-        <div class="col-md-10">
+            <div class="col-md-5">
 
-            <input
-                type="text"
-                class="form-control"
-                name="q"
-                placeholder="Search by Title, Category, Organizer or Venue..."
-                value="{{ query }}">
+                <input
+                    type="text"
+                    name="q"
+                    class="form-control"
+                    placeholder="Search events..."
+                    value="{{ query }}">
 
-        </div>
+            </div>
 
-        <div class="col-md-2">
+            <div class="col-md-4">
 
-            <button class="btn btn-primary w-100">
+                <select
+                    name="category"
+                    class="form-select">
 
-                <i class="bi bi-search"></i>
+                    <option value="">All Categories</option>
+
+                    {% for value,label in categories %}
+
+                        <option
+                            value="{{ value }}"
+                            {% if value == selected_category %}selected{% endif %}>
+
+                            {{ label }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button class="btn btn-primary w-100">
+
+                    <i class="bi bi-search"></i>
 
                     Search
 
-            </button>
+                </button>
 
-        </div>
+            </div>
 
-    </form>
+     </form>
+
+         <div class="row mb-4">
+
+            <div class="col-md-4">
+
+            <div class="card shadow border-0 bg-primary text-white">
+
+            <div class="card-body">
+
+            <h6>Total Events</h6>
+
+            <h2>{{ total_events }}</h2>
+
+            </div>
+
+            </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+            <div class="card shadow border-0 bg-success text-white">
+
+            <div class="card-body">
+
+            <h6>Active Events</h6>
+
+            <h2>{{ active_events }}</h2>
+
+            </div>
+
+            </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+            <div class="card shadow border-0 bg-warning text-dark">
+
+            <div class="card-body">
+
+            <h6>Upcoming Events</h6>
+
+            <h2>{{ upcoming_events }}</h2>
+
+            </div>
+
+            </div>
+
+            </div>
+
+            </div>
 
     <!-- Event Table -->
     <div class="card shadow">
@@ -89,11 +165,11 @@ Event List
 
                     </thead>
 
+                        <tr>
                     <tbody>
 
                     {% for event in events %}
 
-                        <tr>
 
                             <td>{{ event.id }}</td>
 
@@ -209,6 +285,76 @@ Event List
                     </tbody>
 
                 </table>
+
+                                <nav class="mt-4">
+
+                <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+
+                <li class="page-item">
+
+                <a class="page-link"
+                href="?page=1">
+
+                First
+
+                </a>
+
+                </li>
+
+                <li class="page-item">
+
+                <a class="page-link"
+                href="?page={{ page_obj.previous_page_number }}">
+
+                Previous
+
+                </a>
+
+                </li>
+
+                {% endif %}
+
+                <li class="page-item active">
+
+                <span class="page-link">
+
+                {{ page_obj.number }}
+
+                </span>
+
+                </li>
+
+                {% if page_obj.has_next %}
+
+                <li class="page-item">
+
+                <a class="page-link"
+                href="?page={{ page_obj.next_page_number }}">
+
+                Next
+
+                </a>
+
+                </li>
+
+                <li class="page-item">
+
+                <a class="page-link"
+                href="?page={{ page_obj.paginator.num_pages }}">
+
+                Last
+
+                </a>
+
+                </li>
+
+                {% endif %}
+
+                </ul>
+
+                </nav>
 
             </div>
 
