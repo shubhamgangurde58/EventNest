@@ -19,6 +19,10 @@ urlpatterns = [
 
     path( "registrations/", include("registrations.urls")),
 
+    path("accounts/", include("accounts.urls")),
+
+    path("", include("dashboard.urls")),
+
 ]
 
 if settings.DEBUG:

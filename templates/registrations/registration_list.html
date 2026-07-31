@@ -11,17 +11,43 @@ Registration List
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <h2 class="fw-bold">
-            Registration List
+            Registration Management
         </h2>
 
-        <a href="{% url 'event_list' %}" class="btn btn-primary">
-            <i class="bi bi-calendar-event"></i>
-            Events
-        </a>
+        <div>
+
+            <a href="{% url 'export_registration_pdf' %}"
+               class="btn btn-danger">
+
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+
+                Export PDF
+
+            </a>
+
+            <a href="{% url 'export_registration_excel' %}"
+               class="btn btn-success">
+
+                <i class="bi bi-file-earmark-excel-fill"></i>
+
+                Export Excel
+
+            </a>
+
+            <a href="{% url 'event_list' %}"
+               class="btn btn-primary">
+
+                <i class="bi bi-calendar-event"></i>
+
+                Events
+
+            </a>
+
+        </div>
 
     </div>
 
-    <form method="GET" class="row mb-4">
+    <form method="GET" class="row g-2 mb-4">
 
         <div class="col-md-10">
 
@@ -30,13 +56,13 @@ Registration List
                 name="q"
                 value="{{ query }}"
                 class="form-control"
-                placeholder="Search by Student Name, Email or Event">
+                placeholder="Search by Name, Email or Event">
 
         </div>
 
         <div class="col-md-2">
 
-            <button class="btn btn-success w-100">
+            <button class="btn btn-dark w-100">
 
                 <i class="bi bi-search"></i>
 
@@ -48,114 +74,127 @@ Registration List
 
     </form>
 
-    <div class="table-responsive">
+    <div class="card shadow border-0">
 
-        <table class="table table-bordered table-hover align-middle">
+        <div class="card-body p-0">
 
-            <thead class="table-dark">
+            <div class="table-responsive">
 
-            <tr>
+                <table class="table table-hover align-middle mb-0">
 
-                <th>ID</th>
+                    <thead class="table-dark">
 
-                <th>Student</th>
+                    <tr>
 
-                <th>Event</th>
+                        <th>ID</th>
 
-                <th>Email</th>
+                        <th>Student</th>
 
-                <th>Phone</th>
+                        <th>Event</th>
 
-                <th>College</th>
+                        <th>Email</th>
 
-                <th>Year</th>
+                        <th>Phone</th>
 
-                <th>Status</th>
+                        <th>College</th>
 
-                <th>Date</th>
+                        <th>Year</th>
 
-                <th width="100">Action</th>
+                        <th>Status</th>
 
-            </tr>
+                        <th>Date</th>
 
-            </thead>
+                        <th class="text-center">Action</th>
 
-            <tbody>
+                    </tr>
 
-            {% for registration in registrations %}
+                    </thead>
 
-            <tr>
+                    <tbody>
 
-                <td>{{ registration.id }}</td>
+                    {% for registration in registrations %}
 
-                <td>{{ registration.full_name }}</td>
+                    <tr>
 
-                <td>{{ registration.event.title }}</td>
+                        <td>{{ registration.id }}</td>
 
-                <td>{{ registration.email }}</td>
+                        <td>{{ registration.full_name }}</td>
 
-                <td>{{ registration.phone }}</td>
+                        <td>{{ registration.event.title }}</td>
 
-                <td>{{ registration.college }}</td>
+                        <td>{{ registration.email }}</td>
 
-                <td>{{ registration.year }}</td>
+                        <td>{{ registration.phone }}</td>
 
-                <td>
+                        <td>{{ registration.college }}</td>
 
-                    {% if registration.status == "Confirmed" %}
+                        <td>{{ registration.year }}</td>
 
-                        <span class="badge bg-success">
-                            Confirmed
-                        </span>
+                        <td>
 
-                    {% elif registration.status == "Cancelled" %}
+                            {% if registration.status == "Confirmed" %}
 
-                        <span class="badge bg-danger">
-                            Cancelled
-                        </span>
+                                <span class="badge bg-success">
+                                    Confirmed
+                                </span>
 
-                    {% else %}
+                            {% elif registration.status == "Cancelled" %}
 
-                        <span class="badge bg-warning text-dark">
-                            Pending
-                        </span>
+                                <span class="badge bg-danger">
+                                    Cancelled
+                                </span>
 
-                    {% endif %}
+                            {% else %}
 
-                </td>
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
 
-                <td>{{ registration.registration_date|date:"d M Y" }}</td>
+                            {% endif %}
 
-                <td>
+                        </td>
 
-                    <a href="{% url 'registration_detail' registration.id %}"
-                       class="btn btn-primary btn-sm">
+                        <td>
 
-                        <i class="bi bi-eye-fill"></i>
+                            {{ registration.registration_date|date:"d M Y" }}
 
-                    </a>
+                        </td>
 
-                </td>
+                        <td class="text-center">
 
-            </tr>
+                            <a href="{% url 'registration_detail' registration.id %}"
+                               class="btn btn-primary btn-sm">
 
-            {% empty %}
+                                <i class="bi bi-eye-fill"></i>
 
-            <tr>
+                            </a>
 
-                <td colspan="10" class="text-center">
+                        </td>
 
-                    No Registration Found
+                    </tr>
 
-                </td>
+                    {% empty %}
 
-            </tr>
+                    <tr>
 
-            {% endfor %}
+                        <td colspan="10"
+                            class="text-center py-5">
 
-            </tbody>
+                            No Registration Found
 
-        </table>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
 
     </div>
 
