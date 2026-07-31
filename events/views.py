@@ -1,4 +1,6 @@
+from django.http import request
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template import context
 from .models import Event
 from .forms import EventForm
 from django.db.models import Q
@@ -151,4 +153,11 @@ def delete_event(request, id):
         {
             "event": event
         }
+    )
+
+
+    return render(
+        request,
+        "dashboard/events/event_list.html",
+        context
     )

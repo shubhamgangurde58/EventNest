@@ -1,0 +1,513 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                Dashboard
+            </h2>
+
+            <p class="text-muted">
+                Welcome to EventNest Admin Dashboard
+            </p>
+
+        </div>
+
+        <a href="{% url 'add_event' %}"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle-fill"></i>
+
+            Add Event
+
+        </a>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="dashboard-card bg-primary">
+
+                <div>
+
+                    <small>Total Events</small>
+
+                    <h2>{{ total_events }}</h2>
+
+                </div>
+
+                <i class="bi bi-calendar-event dashboard-icon"></i>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="dashboard-card bg-success">
+
+                <div>
+
+                    <small>Active Events</small>
+
+                    <h2>{{ active_events }}</h2>
+
+                </div>
+
+                <i class="bi bi-check-circle dashboard-icon"></i>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="dashboard-card bg-warning">
+
+                <div>
+
+                    <small>Upcoming Events</small>
+
+                    <h2>{{ upcoming_events }}</h2>
+
+                </div>
+
+                <i class="bi bi-clock-history dashboard-icon"></i>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="dashboard-card bg-danger">
+
+                <div>
+
+                    <small>Total Registrations</small>
+
+                    <h2>{{ total_registrations }}</h2>
+
+                </div>
+
+                <i class="bi bi-people-fill dashboard-icon"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mt-5">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Recent Registrations
+
+                    </h5>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover mb-0">
+
+                        <thead class="table-light">
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Event</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {% for registration in recent_registrations %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ registration.full_name }}
+
+                            </td>
+
+                            <td>
+
+                                {{ registration.event.title }}
+
+                            </td>
+
+                            <td>
+
+                                {% if registration.status == "Confirmed" %}
+
+                                <span class="badge bg-success">
+
+                                    Confirmed
+
+                                </span>
+
+                                {% elif registration.status == "Pending" %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Pending
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-danger">
+
+                                    Cancelled
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="3"
+                                class="text-center py-4">
+
+                                No Registration Found
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Upcoming Events
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% for event in upcoming %}
+
+                    <div class="border-bottom pb-3 mb-3">
+
+                        <h6 class="fw-bold">
+
+                            {{ event.title }}
+
+                        </h6>
+
+                        <small class="text-muted">
+
+                            {{ event.event_date }}
+
+                        </small>
+
+                    </div>
+
+                    {% empty %}
+
+                    <p class="text-muted">
+
+                        No Upcoming Events
+
+                    </p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+        <div class="row mt-5">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Monthly Registrations
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="registrationChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Quick Actions
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body d-grid gap-3">
+
+                    <a href="{% url 'add_event' %}" class="btn btn-primary">
+
+                        <i class="bi bi-plus-circle"></i>
+
+                        Add Event
+
+                    </a>
+
+                    <a href="{% url 'event_list' %}" class="btn btn-success">
+
+                        <i class="bi bi-calendar-event"></i>
+
+                        View Events
+
+                    </a>
+
+                    <a href="{% url 'registration_list' %}" class="btn btn-warning">
+
+                        <i class="bi bi-people"></i>
+
+                        Registrations
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mt-5">
+
+        <div class="col-lg-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Registration Status
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="statusChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Recent Activity
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% for registration in recent_registrations %}
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon">
+
+                            <i class="bi bi-person-check-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+
+                                {{ registration.full_name }}
+
+                            </strong>
+
+                            <br>
+
+                            <small class="text-muted">
+
+                                Registered for
+
+                                {{ registration.event.title }}
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+
+                    <p class="text-muted">
+
+                        No Recent Activity
+
+                    </p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const months = {{ chart_months|safe }};
+const totals = {{ chart_totals|safe }};
+
+new Chart(document.getElementById("registrationChart"),{
+
+type:"bar",
+
+data:{
+
+labels:months,
+
+datasets:[{
+
+label:"Registrations",
+
+data:totals
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+display:false
+
+}
+
+}
+
+}
+
+});
+
+const statusLabels = {{ status_labels|safe }};
+const statusCounts = {{ status_counts|safe }};
+
+new Chart(document.getElementById("statusChart"),{
+
+type:"doughnut",
+
+data:{
+
+labels:statusLabels,
+
+datasets:[{
+
+data:statusCounts
+
+}]
+
+},
+
+options:{
+
+responsive:true
+
+}
+
+});
+
+</script>
+
+{% endblock %}
