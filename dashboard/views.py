@@ -16,7 +16,7 @@ import json
 
 
 def home(request):
-    return render(request, "dashboard/home.html")
+    return render(request, "home.html")
 
     
 @login_required(login_url="login")
