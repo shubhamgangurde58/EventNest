@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db import IntegrityError
+from django.core.mail import send_mail
+from django.conf import settings
 
 from events.models import Event
 from .models import Registration
 from .forms import RegistrationForm
 from django.db.models import Q
+from django.http import HttpResponse
+import openpyxl
 
 
 def register_event(request, event_id):
@@ -49,18 +53,61 @@ def register_event(request, event_id):
 
                 event.available_seats -= 1
                 event.save()
+
+                send_mail(
+
+                    subject="Event Registration Successful - EventNest",
+
+                    message=f"""
+
+                Hello {registration.full_name},
+
+                Congratulations!
+
+                Your registration has been completed successfully.
+
+                Event Details
+
+                Event Name : {event.title}
+
+                Organizer : {event.organizer}
+
+                Venue : {event.venue}
+
+                Event Date : {event.event_date}
+
+                Start Time : {event.start_time}
+
+                End Time : {event.end_time}
+
+                Status : {registration.status}
+
+                Thank you for registering.
+
+                Regards,
+                EventNest Team
+
+                """,
+
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+
+                    recipient_list=[registration.email],
+
+                    fail_silently=False,
+
+                )
+
                 messages.success(
                     request,
                     "Registration Successful."
-
                 )
 
-            except IntegrityError:
 
-                messages.warning(
-                    request,
-                    "You have already registered for this event."
-                )
+            except Exception as e:
+
+                print("EMAIL ERROR :", e)
+
+                raise
 
             return redirect("event_detail", id=event.id)
 
@@ -198,3 +245,85 @@ def update_registration_status(request, id, status):
         )
 
     return redirect("registration_detail", id=registration.id)
+
+
+from django.utils.timezone import now
+
+
+def export_registrations_excel(request):
+
+    workbook = openpyxl.Workbook()
+
+    sheet = workbook.active
+
+    sheet.title = "Registrations"
+
+    headers = [
+
+        "ID",
+        "Student Name",
+        "Email",
+        "Phone",
+        "College",
+        "Department",
+        "Year",
+        "Event",
+        "Status",
+        "Registration Date"
+
+    ]
+
+    for column, header in enumerate(headers, start=1):
+
+        cell = sheet.cell(
+            row=1,
+            column=column
+        )
+
+        cell.value = header
+
+        cell.font = openpyxl.styles.Font(
+            bold=True
+        )
+
+    registrations = Registration.objects.select_related(
+        "event"
+    ).all()
+
+    row = 2
+
+    for registration in registrations:
+
+        sheet.cell(row=row, column=1).value = registration.id
+        sheet.cell(row=row, column=2).value = registration.full_name
+        sheet.cell(row=row, column=3).value = registration.email
+        sheet.cell(row=row, column=4).value = registration.phone
+        sheet.cell(row=row, column=5).value = registration.college
+        sheet.cell(row=row, column=6).value = registration.department
+        sheet.cell(row=row, column=7).value = registration.year
+        sheet.cell(row=row, column=8).value = registration.event.title
+        sheet.cell(row=row, column=9).value = registration.status
+        sheet.cell(
+            row=row,
+            column=10
+        ).value = registration.registration_date.strftime(
+            "%d-%m-%Y %H:%M"
+        )
+
+        row += 1
+
+    response = HttpResponse(
+
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+    )
+
+    filename = now().strftime(
+        "Registrations_%d_%m_%Y.xlsx"
+    )
+
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+
+    workbook.save(response)
+
+    return response

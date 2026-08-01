@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
+from accounts.decorators import admin_required
 
 # Home Page
 def home(request):
@@ -71,6 +72,7 @@ def event_list(request):
 
 # Add Event
 @login_required
+@admin_required
 def add_event(request):
 
     if request.method == "POST":
@@ -110,6 +112,7 @@ def event_detail(request, id):
     )
 
 @login_required
+@admin_required
 def edit_event(request, id):
 
     event = get_object_or_404(Event, id=id)
@@ -142,6 +145,7 @@ def edit_event(request, id):
     )
 
 @login_required
+@admin_required
 def delete_event(request, id):
 
     event = get_object_or_404(Event, id=id)

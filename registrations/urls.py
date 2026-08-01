@@ -47,4 +47,10 @@ urlpatterns = [
         name="export_registration_excel"
     ),
 
+    path(
+        "export/excel/",
+        views.export_registrations_excel,
+        name="export_excel"
+    ),
+
 ]

@@ -168,3 +168,26 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "dashboard"
 
 LOGOUT_REDIRECT_URL = "home"
+
+# -----------------------------
+# Email Configuration
+# -----------------------------
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "shubhamgangurde1506@gmail.com"
+
+EMAIL_HOST_PASSWORD = "hkvr utqv fywn bjjn"
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_TIMEOUT = 30
+
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None

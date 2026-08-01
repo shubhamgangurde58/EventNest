@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User
 
 
+
 class UserRegisterForm(UserCreationForm):
 
     class Meta:
@@ -81,3 +82,49 @@ class UserRegisterForm(UserCreationForm):
             "class": "form-control"
         })
     )
+
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+
+        model = User
+
+        fields = [
+
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "department",
+            "profile_image",
+
+        ]
+
+        widgets = {
+
+            "first_name": forms.TextInput(attrs={
+                "class": "form-control"
+            }),
+
+            "last_name": forms.TextInput(attrs={
+                "class": "form-control"
+            }),
+
+            "email": forms.EmailInput(attrs={
+                "class": "form-control"
+            }),
+
+            "phone": forms.TextInput(attrs={
+                "class": "form-control"
+            }),
+
+            "department": forms.TextInput(attrs={
+                "class": "form-control"
+            }),
+
+            "profile_image": forms.FileInput(attrs={
+                "class": "form-control"
+            }),
+
+        }

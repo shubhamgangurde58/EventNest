@@ -4,17 +4,22 @@ from django.utils.timezone import now
 from events.models import Event
 from registrations.models import Registration
 
+from django.contrib.auth.decorators import login_required
+
+from accounts.decorators import faculty_required
+
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
 from django.contrib.auth.decorators import login_required
+from accounts.decorators import faculty_required
 import json
 
 
 def home(request):
     return render(request, "dashboard/home.html")
 
-
-@login_required
+    
+@login_required(login_url="login")
 def dashboard(request):
 
     total_events = Event.objects.count()
