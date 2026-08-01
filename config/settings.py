@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ----------------------------------------------------
 SECRET_KEY = "django-insecure-+#h&1l5938#a_dtk$u%lpnxcr-#ohxwxqx&321b2@a&r2n6ros"
 
+
+
 DEBUG = False
 
 ALLOWED_HOSTS = [
@@ -56,6 +58,7 @@ INSTALLED_APPS = [
 # ----------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -154,6 +157,12 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # ----------------------------------------------------
 # Media Files (Uploaded Images)
