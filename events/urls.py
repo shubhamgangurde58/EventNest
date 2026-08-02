@@ -13,6 +13,4 @@ urlpatterns = [
 
     path("delete/<int:id>/", views.delete_event, name="delete_event"),
 
-    path("detail/<int:id>/",views.event_detail,name="event_detail"),
-
 ]
